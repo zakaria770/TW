@@ -2,11 +2,13 @@
 <html xmlns='http://www.w3.org/1999/xhtml'>
     <head>
         <title>Projet V'Lille</title>
-        <meta charset='UTF-8' />
-        <link rel='stylesheet' href='projet.css' />
+        <meta charset='UTF-8'/>
+
+        <link rel='stylesheet' href='style/projet.css' />
         <link rel='stylesheet' href='https://unpkg.com/leaflet@1.0.3/dist/leaflet.css' />
+
 		<script src='https://unpkg.com/leaflet@1.0.3/dist/leaflet.js'></script>
-		<script src='scriptCarteVLille.js'></script>
+		<script src='scripts/scriptCarteVLille.js'></script>
     </head>
 
     <body>
@@ -14,10 +16,17 @@
     
     <header>
         <p id='entete'>
-            <a href='test.php'>Accueil</a>   <a href='formFilter.php'>Filtre</a>
+            <a href='scripts/test.php'>Accueil</a>   <a href='scripts/formFilter.php'>Filtre</a> 
         </p>
     </header>
-    <nav id='tableauVLille'>		<table id=tableJSON>
+
+
+    <?php 
+    	include 'scripts/data.php';
+    ?>
+
+    <!-- <nav id='tableauVLille'>		
+    	<table id=tableJSON>
 					<thead>
 						<tr>
 							<th>NameStation</th>
@@ -358,9 +367,54 @@
 
 					</tbody>
 
-			</table>
+		</table>
 
-	</nav>
+	</nav> -->
+
+
+
+	<!-- <div id="dataTable">
+		
+		<table>
+			<tbody>
+				<tr>
+					<th>Nom de station</th>
+					<th>Communce</th>
+					<th>Vélos disponibles </th>
+					<th>Places disponibles</th>
+
+				</tr>
+				<?php 
+				foreach ($stations as $station) : 
+				?>
+		        <tr>
+		            <td> <?php 
+		            		echo $station->fields->nom; 
+		            		?> 
+		            </td>
+
+		            <td> <?php 
+		            		echo $station->fields->commune; 
+		            		?> 
+		            </td>
+
+		            <td> <?php 
+		            		echo $station->fields->nbVelosDispo; 
+		            		?> 
+		            </td>
+
+		            <td> <?php 
+		            		echo $station->fields->nbPlacesDispo; 
+		            		?> 
+		            </td>
+
+		        </tr>
+				<?php 
+					// endforeach; 
+				?>
+			</tbody>
+		</table>
+	</div> -->
 	
 	<section id= 'GrandeCarte'>
 		    <div id='carteVLille'></div>

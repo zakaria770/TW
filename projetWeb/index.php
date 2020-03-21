@@ -61,7 +61,8 @@
 	</script> <br><br>
 
 	<?php 
-		$url = 'data.json'; // REPLACE WITH  http://vlille.fil.univ-lille1.fr
+		// $url = 'data.json'; // ON WEBTP REPLACE WITH  http://vlille.fil.univ-lille1.fr
+		$url = 'http://vlille.fil.univ-lille1.fr'; // REPLACE WITH  http://vlille.fil.univ-lille1.fr
 		$data = file_get_contents($url); 
 		$stations = json_decode($data,true); 
 

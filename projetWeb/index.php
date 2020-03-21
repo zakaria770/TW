@@ -52,8 +52,42 @@
 			  maCarte.setView([50.61, 3.14], 14);
 			});
 
+			// 4 : placer un marqueur
+			// let marker = L.marker([50.609614, 3.136635]).addTo(maCarte);
+			      // 5 : lui associer un popup
+			// marker.bindPopup('Le bâtiment M5 <strong>Formations en Informatique</strong>');
+
 		  
-	</script>
+	</script> <br><br>
+
+	<?php 
+		$url = 'data.json'; // REPLACE WITH  http://vlille.fil.univ-lille1.fr
+		$data = file_get_contents($url); 
+		$stations = json_decode($data,true); 
+
+
+	?>
+
+	<table id="stationsTable">
+		<tbody>
+			<tr class="tableRow">
+				<th class="stationHeader">Numéro de station</th>
+				<th class="stationHeader">Nom de station</th>
+				<th class="stationHeader">Commune</th>
+				<th class="stationHeader">Vélos disponibles</th>
+				<th class="stationHeader">Places disponibles</th>
+			</tr>
+			<?php foreach ($stations as $index=>$station) : ?>
+	        <tr class="tableRow">
+	        	<td class="stationData"> <?php echo $index; ?> </td>
+	            <td class="stationData"> <?php echo $station['fields']['nom']; ?> </td>
+	            <td class="stationData"> <?php echo $station['fields']['commune']; ?> </td>
+	            <td class="stationData"> <?php echo $station['fields']['nbvelosdispo']; ?> </td>
+	            <td class="stationData"> <?php echo $station['fields']['nbvelosdispo']; ?> </td>
+	        </tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
 
 
 

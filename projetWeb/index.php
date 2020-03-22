@@ -35,86 +35,156 @@
 		<button class="button button2">Filtrer</button>
 	</div> <br>
 
-	<div id="carte_campus" >
-		
-	</div>
 
 	<?php 
-		// $url = 'data.json'; // SOURCE SUR SERVEUR LOCAL 
-		$url = 'http://vlille.fil.univ-lille1.fr'; // SUR SERVEUR WEBTP : http://vlille.fil.univ-lille1.fr
-		$data = file_get_contents($url); 
-		$stations = json_decode($data,true); 
+			// $url = 'data.json'; // SOURCE SUR SERVEUR LOCAL 
+			$url = 'http://vlille.fil.univ-lille1.fr'; // SUR SERVEUR WEBTP : http://vlille.fil.univ-lille1.fr
+			$data = file_get_contents($url); 
+			$stations = json_decode($data,true); 
 
-		$station1Latitude = $stations[0]['fields']['localisation'][0];
-		$station1Longitude = $stations[0]['fields']['localisation'][1];
-		// echo $station1;
+			$station1Latitude = $stations[0]['fields']['localisation'][0];
+			$station1Longitude = $stations[0]['fields']['localisation'][1];
+			// echo $station1;
 
 	?>
 
-	<!-- Ajout des marqueurs sur la carte -->
-	
+	<div style="height: 1050px;">
+		
+		<p >
+		<ul id="villes" style="
+			float: right; 
+			width: 700px;
+			height: 700px; 
+			display: inline-block;
+		    
+		    padding: 0px;
+		    list-style-type: circle;
+		    margin: 0;
+		    ">
+			 <?php foreach ($stations as $index=>$station) : ?>
+				<li style="display:inline;font-size: 10pt;
+				    list-style-type: none;
+				    padding: 0px 8px;
+				    border: dotted 1px black;
+				    border-radius: 4px;
+				    width: 120px;
+				    margin: 3px; "
+				    data-geo="[<?php echo $station['fields']['localisation'][0]; ?> , <?php echo $station['fields']['localisation'][1]; ?>]"> - <?php echo $station['fields']['nom']; ?>
+					
+				</li>
 
-
-
-	<ul id="villes">
-		 <?php foreach ($stations as $index=>$station) : ?>
-			<li data-geo="[<?php echo $station['fields']['localisation'][0]; ?> , <?php echo $station['fields']['localisation'][1]; ?>]"><?php echo $station['fields']['nom']; ?></li>
-
-		<?php endforeach; ?>
+			<?php endforeach; ?>
 	  
-	  <!-- <li data-geo="[50.62278,3.14417]">Villeneuve-d'Ascq</li> -->
 	  
-	</ul>
+		</ul>
+		
+		<div id="carte_campus" style="width : 600px; height : 600px;float: left; margin-right: 50px;">
+			
+		</div>
 
-	<script type="text/javascript">
+		<div>
+			<script type="text/javascript">
 
 
 
-			window.addEventListener('DOMContentLoaded', ()=>{
-			      // 1 : création
-			  let maCarte = L.map('carte_campus');
+				window.addEventListener('DOMContentLoaded', ()=>{
+				      // 1 : création
+				  let maCarte = L.map('carte_campus');
+				  
+				      // 2 : choix du fond de carte
+				  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+				    attribution: '©️ OpenStreetMap contributors'
+				  }).addTo(maCarte);
+				    
+				      // 3 : réglage de la partie visible (centre, niveau de zoom)
+				  maCarte.setView([50.61, 3.14], 14);
+
+				  // placerMarqueurs(maCarte);
+				  // 4 : placer un marqueur
+				var station1LatitudeLiteral="<?php echo $station1Latitude; ?>";
+				var station1LongitudeLiteral="<?php echo $station1Longitude; ?>";
+				// alert(station1LatitudeLiteral);
+				// alert(station1LongitudeLiteral);
+
+				// let marker = L.marker([50.609614, 3.136635]).addTo(maCarte);
+			    // 5 : lui associer un popup
+			  	// marker.bindPopup('Le bâtiment M5 <strong>Formations en Informatique</strong>');
+
+
+
+
+			  	let pointsList = [];
+				for (let item of document.querySelectorAll('#villes>li')){
+				    // item est le noeud DOM d'un <li>
+				    let nom = item.textContent;
+				    let geoloc = JSON.parse(item.dataset.geo);
+				    L.marker(geoloc).addTo(maCarte).bindPopup(nom);
+				    pointsList.push(geoloc);
+				}
+
+				if (pointsList.length>0)
+				    maCarte.fitBounds(pointsList);
+				});
+
+				setupListeners(item,marker);
+
+				       // réglage de la partie visible
+				
+
+				 // mise en place des listeners
+				function setupListeners(item, marker){
+				    // item est le noeud DOM d'un élément li (donc une ville de la liste)
+				    // marker est le marqueur Leaflet créé pour cette même ville 
+				    item.addEventListener('click', ()=>{
+				      marker.openPopup();
+				      setCurrent(item);
+				      maCarte.setView(marker.getLatLng(),13);
+				    });
+				    marker.on("click", ()=>{
+				      setCurrent(item);
+				      maCarte.setView(marker.getLatLng(),13);
+				    });
+				}
+				// gestion de l'item courant
+				{
+				  let itemCourant = null;
+				  
+				  function setCurrent(item){
+				      if (itemCourant)
+				          itemCourant.classList.toggle('current');
+				      itemCourant = item;
+				      itemCourant.classList.toggle('current');  
+				  }
+				}
+
+
 			  
-			      // 2 : choix du fond de carte
-			  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			    attribution: '©️ OpenStreetMap contributors'
-			  }).addTo(maCarte);
-			    
-			      // 3 : réglage de la partie visible (centre, niveau de zoom)
-			  maCarte.setView([50.61, 3.14], 14);
+			</script> <br><br>
+		</div>
+	</p> 
+	</div>
 
-			  // placerMarqueurs(maCarte);
-			  // 4 : placer un marqueur
-			var station1LatitudeLiteral="<?php echo $station1Latitude; ?>";
-			var station1LongitudeLiteral="<?php echo $station1Longitude; ?>";
-			// alert(station1LatitudeLiteral);
-			// alert(station1LongitudeLiteral);
 
-			// let marker = L.marker([50.609614, 3.136635]).addTo(maCarte);
-		    // 5 : lui associer un popup
-		  	// marker.bindPopup('Le bâtiment M5 <strong>Formations en Informatique</strong>');
+
+		
+
+		
 
 
 
 
-		  	let pointsList = [];
-			 for (let item of document.querySelectorAll('#villes>li')){
-			    // item est le noeud DOM d'un <li>
-			    let nom = item.textContent;
-			    let geoloc = JSON.parse(item.dataset.geo);
-			    L.marker(geoloc).addTo(maCarte).bindPopup(nom);
-			    pointsList.push(geoloc);
-			}
-			       // réglage de la partie visible
-			if (pointsList.length>0)
-			    maCarte.fitBounds(pointsList);
-			});
 
 
-		  
-	</script> <br><br>
 
 
-	
+
+
+
+
+
+
+
+
 
 	<table id="stationsTable">
 		<tbody>

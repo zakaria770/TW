@@ -35,14 +35,14 @@
 
 
 /*Carte Lille */
-#carte_campus { 
-  width : 400px; 
-  height : 400px; 
+/*#carte_campus { 
+  width : 200px; 
+  height : 200px; 
   margin: auto;
   width: 50%;
   border: 3px solid;
   padding: 10px;
-}
+}*/
 
 
 /*Tableau des stations*/
@@ -69,11 +69,6 @@
   background-color: #f44336;
   color: white;
 }
-
-
-
-
-
 
 
 

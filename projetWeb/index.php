@@ -15,6 +15,8 @@
 	<!-- intégration de la map leaflet -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" crossorigin=""/>
   	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" crossorigin=""></script>
+
+  	<script type="text/javascript" src="scripts/vlilleScript.php"></script>
 </head>
 
 <body>
@@ -36,7 +38,36 @@
 	<div id="carte_campus" >
 		
 	</div>
+
+	<?php 
+		// $url = 'data.json'; // SOURCE SUR SERVEUR LOCAL 
+		$url = 'http://vlille.fil.univ-lille1.fr'; // SUR SERVEUR WEBTP : http://vlille.fil.univ-lille1.fr
+		$data = file_get_contents($url); 
+		$stations = json_decode($data,true); 
+
+		$station1Latitude = $stations[0]['fields']['localisation'][0];
+		$station1Longitude = $stations[0]['fields']['localisation'][1];
+		// echo $station1;
+
+	?>
+
+	<!-- Ajout des marqueurs sur la carte -->
+	
+
+
+
+	<ul id="villes">
+		 <?php foreach ($stations as $index=>$station) : ?>
+			<li data-geo="[<?php echo $station['fields']['localisation'][0]; ?> , <?php echo $station['fields']['localisation'][1]; ?>]"><?php echo $station['fields']['nom']; ?></li>
+
+		<?php endforeach; ?>
+	  
+	  <!-- <li data-geo="[50.62278,3.14417]">Villeneuve-d'Ascq</li> -->
+	  
+	</ul>
+
 	<script type="text/javascript">
+
 
 
 			window.addEventListener('DOMContentLoaded', ()=>{
@@ -50,24 +81,40 @@
 			    
 			      // 3 : réglage de la partie visible (centre, niveau de zoom)
 			  maCarte.setView([50.61, 3.14], 14);
+
+			  // placerMarqueurs(maCarte);
+			  // 4 : placer un marqueur
+			var station1LatitudeLiteral="<?php echo $station1Latitude; ?>";
+			var station1LongitudeLiteral="<?php echo $station1Longitude; ?>";
+			// alert(station1LatitudeLiteral);
+			// alert(station1LongitudeLiteral);
+
+			// let marker = L.marker([50.609614, 3.136635]).addTo(maCarte);
+		    // 5 : lui associer un popup
+		  	// marker.bindPopup('Le bâtiment M5 <strong>Formations en Informatique</strong>');
+
+
+
+
+		  	let pointsList = [];
+			 for (let item of document.querySelectorAll('#villes>li')){
+			    // item est le noeud DOM d'un <li>
+			    let nom = item.textContent;
+			    let geoloc = JSON.parse(item.dataset.geo);
+			    L.marker(geoloc).addTo(maCarte).bindPopup(nom);
+			    pointsList.push(geoloc);
+			}
+			       // réglage de la partie visible
+			if (pointsList.length>0)
+			    maCarte.fitBounds(pointsList);
 			});
 
-			// 4 : placer un marqueur
-			// let marker = L.marker([50.609614, 3.136635]).addTo(maCarte);
-			      // 5 : lui associer un popup
-			// marker.bindPopup('Le bâtiment M5 <strong>Formations en Informatique</strong>');
 
 		  
 	</script> <br><br>
 
-	<?php 
-		// $url = 'data.json'; // ON WEBTP REPLACE WITH  http://vlille.fil.univ-lille1.fr
-		$url = 'http://vlille.fil.univ-lille1.fr'; // REPLACE WITH  http://vlille.fil.univ-lille1.fr
-		$data = file_get_contents($url); 
-		$stations = json_decode($data,true); 
 
-
-	?>
+	
 
 	<table id="stationsTable">
 		<tbody>
@@ -77,18 +124,25 @@
 				<th class="stationHeader">Commune</th>
 				<th class="stationHeader">Vélos disponibles</th>
 				<th class="stationHeader">Places disponibles</th>
+				<th class="stationHeader">Etat</th>
 			</tr>
+
 			<?php foreach ($stations as $index=>$station) : ?>
+
 	        <tr class="tableRow">
 	        	<td class="stationData"> <?php echo $index; ?> </td>
 	            <td class="stationData"> <?php echo $station['fields']['nom']; ?> </td>
 	            <td class="stationData"> <?php echo $station['fields']['commune']; ?> </td>
 	            <td class="stationData"> <?php echo $station['fields']['nbvelosdispo']; ?> </td>
 	            <td class="stationData"> <?php echo $station['fields']['nbvelosdispo']; ?> </td>
+	            <td class="stationData"> <?php echo $station['fields']['etat']; ?> </td>
 	        </tr>
+
 			<?php endforeach; ?>
 		</tbody>
 	</table>
+
+	
 
 
 

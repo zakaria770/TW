@@ -17,6 +17,7 @@
   	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" crossorigin=""></script>
 
   	<script type="text/javascript" src="scripts/vlilleScript.php"></script>
+  	<script type="text/javascript" src="scripts/vlilleScript.js"></script>
 </head>
 
 <body>
@@ -24,15 +25,20 @@
 
 	<table id="banner">
 	  <tr>
-	    <td width="60%"><img src="images/vLille1.jpg" height="500" width="850"></td>
+	    <td width="60%"><img src="images/vLille4.jpg" height="500" width="850"></td>
 	    <td style="font-family: 'Shrikhand', cursive; font-size: 40px;" width="40%"> Simplifiez-vous la vie !  <br> Simplifiez-vous le trajet!</td>
 	  </tr>
 	</table><br>
 
 
 	<div style="text-align:center;">
-		<button class="button button3">Notre réseau Vlille</button>
+		<a href="#mapDiv"><button class="button button3">Nos stations à votre disposition</button></a>
+
+		<a href="#stationsTable"><button class="button button3">Notre réseau Vlille</button></a>
+
 		<button class="button button2">Filtrer</button>
+
+		<a href="#footerDivID" ><button class="button button2">A propos</button></a>
 	</div> <br>
 
 
@@ -48,9 +54,9 @@
 
 	?>
 
-	<div style="height: 1050px;">
+	<div id="mapDiv" style="height: 800px;">
 		
-		<p >
+		<p>
 		<ul id="villes" style="
 			float: right; 
 			width: 700px;
@@ -83,83 +89,60 @@
 		</div>
 
 		<div>
+			
+
+
 			<script type="text/javascript">
-
-
-
-				window.addEventListener('DOMContentLoaded', ()=>{
-				      // 1 : création
-				  let maCarte = L.map('carte_campus');
-				  
-				      // 2 : choix du fond de carte
-				  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-				    attribution: '©️ OpenStreetMap contributors'
-				  }).addTo(maCarte);
-				    
-				      // 3 : réglage de la partie visible (centre, niveau de zoom)
-				  maCarte.setView([50.61, 3.14], 14);
-
-				  // placerMarqueurs(maCarte);
-				  // 4 : placer un marqueur
-				var station1LatitudeLiteral="<?php echo $station1Latitude; ?>";
-				var station1LongitudeLiteral="<?php echo $station1Longitude; ?>";
-				// alert(station1LatitudeLiteral);
-				// alert(station1LongitudeLiteral);
-
-				// let marker = L.marker([50.609614, 3.136635]).addTo(maCarte);
-			    // 5 : lui associer un popup
-			  	// marker.bindPopup('Le bâtiment M5 <strong>Formations en Informatique</strong>');
-
-
-
-
-			  	let pointsList = [];
-				for (let item of document.querySelectorAll('#villes>li')){
-				    // item est le noeud DOM d'un <li>
-				    let nom = item.textContent;
-				    let geoloc = JSON.parse(item.dataset.geo);
-				    L.marker(geoloc).addTo(maCarte).bindPopup(nom);
-				    pointsList.push(geoloc);
-				}
-
-				if (pointsList.length>0)
-				    maCarte.fitBounds(pointsList);
-				});
-
-				setupListeners(item,marker);
-
-				       // réglage de la partie visible
 				
 
-				 // mise en place des listeners
-				function setupListeners(item, marker){
-				    // item est le noeud DOM d'un élément li (donc une ville de la liste)
-				    // marker est le marqueur Leaflet créé pour cette même ville 
-				    item.addEventListener('click', ()=>{
-				      marker.openPopup();
-				      setCurrent(item);
-				      maCarte.setView(marker.getLatLng(),13);
-				    });
-				    marker.on("click", ()=>{
-				      setCurrent(item);
-				      maCarte.setView(marker.getLatLng(),13);
-				    });
-				}
-				// gestion de l'item courant
-				{
-				  let itemCourant = null;
-				  
-				  function setCurrent(item){
-				      if (itemCourant)
-				          itemCourant.classList.toggle('current');
-				      itemCourant = item;
-				      itemCourant.classList.toggle('current');  
-				  }
-				}
+					window.addEventListener('DOMContentLoaded', ()=>{
+					      // 1 : création
+					  maCarte = L.map('carte_campus');
+					  
+					      // 2 : choix du fond de carte
+					  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+					    attribution: '©️ OpenStreetMap contributors'
+					  }).addTo(maCarte);
+					  
+					  let pointsList = [];
+					  for (let item of document.querySelectorAll('#villes>li')){
+					    let nom = item.textContent;
+					    let geoloc = JSON.parse(item.dataset.geo);
+					    let marker = L.marker(geoloc).addTo(maCarte).bindPopup(nom);
+					    pointsList.push(geoloc);
+					    
+					    setupListeners(item,marker);
+					  }
+					  if (pointsList.length>0)
+					    maCarte.fitBounds(pointsList);
+					 
+
+					});
 
 
-			  
-			</script> <br><br>
+					function setupListeners(item, marker){
+					    item.addEventListener('click', ()=>{
+					      marker.openPopup();
+					      setCurrent(item);
+					      maCarte.setView(marker.getLatLng(),13);
+					    });
+					    marker.on("click", ()=>{
+					      setCurrent(item);
+					      maCarte.setView(marker.getLatLng(),13);
+					    });
+					}
+
+					{
+					let itemCourant = null;
+
+					function setCurrent(item){
+					    if (itemCourant)
+					        itemCourant.classList.toggle('current');
+					    itemCourant = item;
+					    itemCourant.classList.toggle('current');  
+					}
+					}
+			</script>
 		</div>
 	</p> 
 	</div>
@@ -210,9 +193,33 @@
 
 			<?php endforeach; ?>
 		</tbody>
-	</table>
+	</table> <br><br>
 
 	
+
+
+	<hr>
+	<div class="footerDiv" id="footerDivID" style="background-color: white">
+	  <table style="color: black;">
+	  	<tr>
+	  		<td style="width:1000px;">Nos services</td>
+	  		<td >A propos</td>
+	  	</tr>
+
+	  	<tr>
+	  		<td><a href="#banner">Accueil</a></td>
+	  		<td><a href="credits.php">Crédits</a></td>
+	  	</tr>
+
+	  	<tr>
+	  		<td><a href="#mapDiv">Nos stations à votre disposition</a></td>
+	  	</tr>
+
+	  	<tr>
+	  		<td><a href="#stationsTable">Notre réseau MEL</a></td>
+	  	</tr>
+	  </table>
+	</div>
 
 
 

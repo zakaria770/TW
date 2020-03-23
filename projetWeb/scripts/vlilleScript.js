@@ -1,8 +1,10 @@
-window.addEventListener("load",dessinerCarte);
-window.addEventListener("load",dessinerMiniCarte);
+function setCurrent(item){
+    if (itemCourant)
+        itemCourant.classList.toggle('current');
+    itemCourant = item;
+    itemCourant.classList.toggle('current');  
+}
 
-var globalMarqueur = L.marker([0,0]);
-var miniMap;
 
 function informationsBind(commune,adresse,libelle,etat,velos,places){
     var informations = "<h3>"

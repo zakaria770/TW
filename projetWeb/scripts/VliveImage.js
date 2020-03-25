@@ -1,139 +1,52 @@
+/*(cc) Creative Commons CC-BY-NC Bruno.Bogaert [at] univ-lille1.fr
+*/
 
-
-function setCurrent(item){
-    if (itemCourant)
-        itemCourant.classList.toggle('current');
-    itemCourant = item;
-    itemCourant.classList.toggle('current');  
-}
-
-
-function informationsBind(commune,adresse,libelle,etat,velos,places){
-    var informations = "<h3>"
-        +commune+" | "+adresse
-        +"</h3>"
-        +"<ul>"
-        +"<li>Numero de la station: "+libelle+"</li>"
-        +"<li>Nombre de vélos disponibles: "+velos+"</li>"
-        +"<li>Nombre de places disponibles: "+places+"</li>"
-        +"<li> Etat de la station: "+etat+"</li>"+
-        "</ul>";
-    return informations;
-}
-
-function dessinerMiniCarte(){
-  miniMap = L.map('miniCarte');
-
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '©️ <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(miniMap);
-
-  globalMarqueur.addTo(miniMap);
-}
-
-function clickInTable(){
-  var commune = this.dataset.commune;
-  var adresse = this.dataset.adresse;
-  var libelle = this.dataset.libelle;
-  var etat = this.dataset.etat;
-  var velos = this.dataset.velodispo;
-  var places = this.dataset.espace;
-  var point = [this.dataset.lat,this.dataset.lon];
-
-  var iconDraw = new VliveImage(velos,places);
-  document.getElementById("miniCarte").style.display = "block";
-  globalMarqueur.setLatLng(point);
-  globalMarqueur.setIcon(iconDraw.getLeafletIcon());
-  globalMarqueur.bindPopup(informationsBind(commune,adresse,libelle,etat,velos,places));
-  globalMarqueur.update();
-
-  miniMap.setView(point,17);
-
-
-
-  var CB = "OUI";
-
-  if(this.dataset.typeCB == "SANS TPE"){
-   CB = "NON";
- }
-  var text = "<h3>"+this.dataset.namestation+" "+this.dataset.adresse+"("+this.dataset.commune+")"+"</h3>"+"<ul>"
-            +"<li>Numero de la station: "+this.dataset.libelle+"</li>"
-            +"<li>Nombre de vélos disponibles: "+this.dataset.velodispo+"</li>"
-            +"<li>Nombre de places disponibles: "+this.dataset.espace+"</li>"
-            +"<li>Support Carte Bancaire: "+CB+"</li>"+"</ul>";
-Informations.innerHTML=text;
-
-}
-
-function placerMarqueurs(map) {
-   var l = document.querySelectorAll("table#tableJSON>tbody>tr"); //liste de toutes les lignes
-   var pointList= [];
-   for (var i=0; i<l.length; i++){ // pour chaque ligne, insertion d'un marqueur sur la carte
-        // nom de la commune :
-        var commune = l[i].dataset.commune;
-        var adresse = l[i].dataset.adresse;
-        var libelle = l[i].dataset.libelle;
-        var etat = l[i].dataset.etat;
-        // insertion du marqueur selon les coordonnées trouvées dans les attributs data-lat et data-lon :
-        var velos = l[i].dataset.velodispo;
-        l[i].addEventListener("click",clickInTable);
-        var places = l[i].dataset.espace;
-        var point = [l[i].dataset.lat, l[i].dataset.lon];
-        var iconDraw = new VliveImage(velos,places);
-        // Informations affichées lors d'un 'clic' sur une des stations de la carte
-
-
-        L.marker( point, {icon:iconDraw.getLeafletIcon()} ).addTo(map).bindPopup(informationsBind(commune,adresse,libelle,etat,velos,places));
-        pointList.push(point);
-
-   }
-   // ajustement de la zone d'affichage de la carte aux points marqués
-    map.fitBounds(pointList);
-}
-
-
-function dessinerCarte(){
-    // création de la carte, centrée sur le point 50.60976, 3.13909, niveau de zoom 16
-    // cette carte sera dessinée dans l'élément HTML "cartecampus"
-    var map = L.map('carteVLille').setView([50.628606, 3.059994], 13);
-
-    // ajout du fond de carte OpenStreetMap
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '©️ <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-  placerMarqueurs(map);
-}
+/*
+ * VliveImageColors class
+ *   Image displaying bicycle and free plug counts
+ *   Background color depends on value (koColor for n=0, warningColor for n<=2, okColor otherwise)
+ *   ready to get Leaflet Icon
+ *   
+ * ==> see also VliveImage class
+ * 
+ * usage  :
+ * create new Image File:
+ *     var vIcIm = new VliveIcon(nbVelos, nbPlaces, okColor, koColor, warningColor);
+ * get Leaflet Icon, to use on Leaflet maps
+ *     vIcIm.getLeafletIcon();
+ * get blob URL :
+ *     icon.getURL();
+ */
 
 class VliveImageColors{
   constructor(velos,places,okColor,koColor,warningColor){
    this.okColor = okColor;
    this.koColor = koColor;
    this.warningColor = warningColor;
-   var svgDoc= new DOMParser().parseFromString(VliveImageColors.svgSource,'image/svg+xml');
+   let svgDoc= VliveImageColors.svgDoc.cloneNode(true);
    svgDoc.querySelector('#velos-tspan').textContent = velos+' v';
    svgDoc.querySelector('#places-tspan').textContent = places+' p';
    svgDoc.querySelector('#velos-zone').style.fill = this.getColor(velos);
    svgDoc.querySelector('#places-zone').style.fill = this.getColor(places);
    this.blob = new Blob([new XMLSerializer().serializeToString(svgDoc)],{type:'image/svg+xml'});
    this.url = window.URL.createObjectURL(this.blob);
-  };
+  }
   getColor(i){
    if (i==0)
       return this.koColor;
    else if (i<=2)
       return this.warningColor;
-   else
+   else 
       return this.okColor;
   }
   getURL(){
     return this.url;
   }
   getLeafletIcon(){ // needs Leaflet library
-    return L.icon({iconUrl: this.getURL(), iconSize: [27,41], iconAnchor: [13.5, 41]});
+    return L.icon({iconUrl: this.getURL(), iconSize: [27,41], iconAnchor: [13.9, 35]});
   }
 }
-/*
+/* 
 */
 /*
  * VliveImage class
@@ -141,7 +54,7 @@ class VliveImageColors{
  *
  * usage  :
  * create new Image File:
- *     var vIcIm = new VliveIcon(nbVelos, nbPlace);
+ *     var vIcIm = VliveImage.getInstance(nbVelos, nbPlace);
  * get Leaflet Icon, to use on Leaflet maps
  *     vIcIm.getLeafletIcon();
  * get blob URL :
@@ -151,7 +64,15 @@ class VliveImage extends VliveImageColors{
   constructor(velos, places){
     super(velos,places,"#43ff6c","#ff5543","orange");
   }
+  static getInstance(velos, places){
+    let key=velos+'|'+places;
+    if (! VliveImage.cache.has(key) ) {
+     VliveImage.cache.set(key, new  VliveImage(velos,places));
+    }
+    return VliveImage.cache.get(key);
+  }
 }
+VliveImage.cache = new Map();
 
 /* static value of original SVG source
  */
@@ -226,3 +147,5 @@ VliveImageColors.svgSource=`
          y="252.67798" text-anchor="middle">#places#</tspan></text>
 </g></svg>
 `;
+VliveImageColors.svgDoc=new DOMParser().parseFromString(VliveImageColors.svgSource,'image/svg+xml');
+

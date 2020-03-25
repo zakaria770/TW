@@ -18,6 +18,7 @@
 
   	<script type="text/javascript" src="scripts/vlilleScript.php"></script>
   	<script type="text/javascript" src="scripts/vlilleScript.js"></script>
+  	<script type="text/javascript" src="scripts/VliveImage.js"></script>
 </head>
 
 <body>
@@ -36,7 +37,7 @@
 
 		<a href="#stationsTable"><button class="button button3">Notre réseau Vlille</button></a>
 
-		<button class="button button2">Filtrer</button>
+		<a href="#filterDiv"><button class="button button2">Filtrer</button></a>
 
 		<a href="#footerDivID" ><button class="button button2">A propos</button></a>
 	</div> <br>
@@ -50,6 +51,8 @@
 
 			$station1Latitude = $stations[0]['fields']['localisation'][0];
 			$station1Longitude = $stations[0]['fields']['localisation'][1];
+			$nbrVelos = $station['fields']['nbvelosdispo'];
+			$nbrPlaces = $station['fields']['nbplacesdispo'];
 			// echo $station1;
 
 	?>
@@ -68,14 +71,16 @@
 		    margin: 0;
 		    ">
 			 <?php foreach ($stations as $index=>$station) : ?>
-				<li style="display:inline;font-size: 10pt;
+				<li style="display:inline;font-size: 15pt;
 				    list-style-type: none;
-				    padding: 0px 8px;
+				    padding: 0px 10px;
 				    border: dotted 1px black;
-				    border-radius: 4px;
-				    width: 120px;
-				    margin: 3px; "
-				    data-geo="[<?php echo $station['fields']['localisation'][0]; ?> , <?php echo $station['fields']['localisation'][1]; ?>]"> - <?php echo $station['fields']['nom']; ?>
+				    border-radius: 60px;
+				    width: 150px;
+				    margin: 5px; "
+
+				    data-geo="[<?php echo $station['fields']['localisation'][0]; ?> , <?php echo $station['fields']['localisation'][1]; ?>]" data-nbrVelos="<?php echo $station['fields']['nbvelosdispo']; ?> " > - <?php echo $station['fields']['nom']; ?>
+
 					
 				</li>
 
@@ -106,11 +111,18 @@
 					  
 					  let pointsList = [];
 					  for (let item of document.querySelectorAll('#villes>li')){
+
 					    let nom = item.textContent;
 					    let geoloc = JSON.parse(item.dataset.geo);
+					    // let nbrVelos = JSON.parse(item.dataset.nbrVelos);
+
+
+
+					    // let marker = L.marker(geoloc).addTo(maCarte).bindPopup(nom);
+					    // let marker = L.marker( geoloc, {icon:image.getLeafletIcon()} ).addTo(maCarte).bindPopup(nom);
+
 					    let marker = L.marker(geoloc).addTo(maCarte).bindPopup(nom);
-					    pointsList.push(geoloc);
-					    
+					    pointsList.push(geoloc);					    
 					    setupListeners(item,marker);
 					  }
 					  if (pointsList.length>0)
@@ -149,29 +161,21 @@
 
 
 
-		
+	<div id="filterDiv">
+		<input type="text" id="nomStationInput" onkeyup="filterNomStation()" placeholder="Filtrer par nom de station" title="Type in a name" style="width: 250px; height:50px; font-size:20px;">
 
-		
+		<input type="text" id="communeInput" onkeyup="filterCommune()" placeholder="Filtrer par commune" title="Type in a name" style="width: 250px; height:50px; font-size:20px;">
 
+		<input type="text" id="velosDispoInput" onkeyup="filterVelosDispo()" placeholder="Filtrer par vélos disponibles" title="Type in a name" style="width: 250px; height:50px; font-size:20px;">
 
+		<input type="text" id="placesDispoInput" onkeyup="filterPlacesDispo()" placeholder="Filtrer par nombre de places" title="Type in a name" style="width: 250px; height:50px; font-size:20px;">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	<input type="text" id="etatInput" onkeyup="filterEtat()" placeholder="Filtrer par  état" title="Type in a name" style="width: 250px; height:50px; font-size:20px;">
+	</div>
 
 	<table id="stationsTable">
 		<tbody>
-			<tr class="tableRow">
+			<tr class="tableRow header">
 				<th class="stationHeader">Numéro de station</th>
 				<th class="stationHeader">Nom de station</th>
 				<th class="stationHeader">Commune</th>
@@ -194,6 +198,107 @@
 			<?php endforeach; ?>
 		</tbody>
 	</table> <br><br>
+
+		<script>
+
+			function filterNomStation() {
+			  var input, filter, table, tr, td, i, txtValue;
+			  input = document.getElementById("nomStationInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("stationsTable");
+			  tr = table.getElementsByTagName("tr");
+			  for (i = 0; i < tr.length; i++) {
+			    td = tr[i].getElementsByTagName("td")[1];
+			    if (td) {
+			      txtValue = td.textContent || td.innerText;
+			      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			        tr[i].style.display = "";
+			      } else {
+			        tr[i].style.display = "none";
+			      }
+			    }       
+			  }
+			}
+
+			function filterCommune() {
+			  var input, filter, table, tr, td, i, txtValue;
+			  input = document.getElementById("communeInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("stationsTable");
+			  tr = table.getElementsByTagName("tr");
+			  for (i = 0; i < tr.length; i++) {
+			    td = tr[i].getElementsByTagName("td")[2];
+			    if (td) {
+			      txtValue = td.textContent || td.innerText;
+			      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			        tr[i].style.display = "";
+			      } else {
+			        tr[i].style.display = "none";
+			      }
+			    }       
+			  }
+			}
+
+			function filterVelosDispo() {
+			  var input, filter, table, tr, td, i, txtValue;
+			  input = document.getElementById("velosDispoInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("stationsTable");
+			  tr = table.getElementsByTagName("tr");
+			  for (i = 0; i < tr.length; i++) {
+			    td = tr[i].getElementsByTagName("td")[3];
+			    if (td) {
+			      txtValue = td.textContent || td.innerText;
+			      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			        tr[i].style.display = "";
+			      } else {
+			        tr[i].style.display = "none";
+			      }
+			    }       
+			  }
+			}
+
+
+			function filterPlacesDispo() {
+			  var input, filter, table, tr, td, i, txtValue;
+			  input = document.getElementById("placesDispoInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("stationsTable");
+			  tr = table.getElementsByTagName("tr");
+			  for (i = 0; i < tr.length; i++) {
+			    td = tr[i].getElementsByTagName("td")[4];
+			    if (td) {
+			      txtValue = td.textContent || td.innerText;
+			      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			        tr[i].style.display = "";
+			      } else {
+			        tr[i].style.display = "none";
+			      }
+			    }       
+			  }
+			}
+
+
+			function filterEtat() {
+			  var input, filter, table, tr, td, i, txtValue;
+			  input = document.getElementById("etatInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("stationsTable");
+			  tr = table.getElementsByTagName("tr");
+			  for (i = 0; i < tr.length; i++) {
+			    td = tr[i].getElementsByTagName("td")[5];
+			    if (td) {
+			      txtValue = td.textContent || td.innerText;
+			      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			        tr[i].style.display = "";
+			      } else {
+			        tr[i].style.display = "none";
+			      }
+			    }       
+			  }
+			}
+	</script>
+
 
 	
 

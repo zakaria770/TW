@@ -1,0 +1,44 @@
+Description: logo du service V'lille (dans l'entête de la page d'accueil), icone de l'onglet(même photo modifiée)
+Auteur: transpole
+Licence: ETALAB
+url: https://fr.wikipedia.org/wiki/Fichier:Logo-vlille.svg
+
+Description: Données de la MEL
+Auteur: transpole, mis en place par l'equipe technique du département informatique
+Licence: ETALAB
+url: http://vlille.fil.univ-lille1.fr/
+
+Description:leaflet
+Auteur: open-source JavaScript library
+Licence: OpenStreetMap contributors
+url: https://leafletjs.com/
+
+Description: fond de carte - OpenStreetMap
+Auteur: Fondation OpenStreetMap (OSMF)
+Licence: OpenStreetMap contributors
+url: https://openstreetmap.org
+
+Description: l'image maintenance
+Auteur: Google LLC (emoji)
+Licence: Apache Licence Version 2.0
+url: https://emojiterra.com/fr/disque-jaune/
+
+Description: l'image off
+Auteur: Google LLC (emoji)
+Licence: Apache Licence Version 2.0
+url: https://emojiterra.com/fr/rond-rouge/
+
+Description: l'image on
+Auteur: Google LLC (emoji)
+Licence: Apache Licence Version 2.0
+url: https://emojiterra.com/fr/disque-vert/
+
+Description: l'image CB (no CB est la même photo modifiée)
+Auteur: Groupement des cartes bancaires CB
+Licence: Creative Commons
+url: https://www.logolynx.com/topic/carte+bleue#&gid=1&pid=4
+
+Description: logo de la MEL (en bas de la page d'accueil)
+Auteur: transpole
+Licence: ETALAB
+url: https://www.lillemetropole.fr/

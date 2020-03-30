@@ -1,0 +1,203 @@
+nav{
+	width: 50%;
+	height: 545px;
+	overflow:auto;
+	float:left;
+
+}
+
+
+
+
+table #tableauVLille{
+  border-collapse:collapse;
+}
+
+#tableauVLille td,th{
+  border: 1pt solid black;
+  padding:1pt;
+  text-align: center;
+  font-size: 12px;
+}
+
+
+
+#GrandeCarte {
+	width: 50%;
+	height : 545px;
+	margin-left: 23%;
+}
+
+
+
+
+
+/*#main li a {
+	text-decoration: none;
+}*/
+
+
+
+/*header{
+	background-color: deepskyblue;
+	height:30px;
+}
+
+#entete{
+	font-size: 25px;
+	margin-left: 15px;
+}
+
+a{
+	text-decoration: underline;
+	color:white;
+}*/
+
+th{
+	text-decoration:underline;
+	font_size: 20pt;
+	background-color:#e8e8e8;
+}
+
+tr:nth-child(2n){
+	background-color:#f4f4f4;
+}
+
+tr:nth-child(2n-1){
+	background-color: #ffffff;
+}
+
+tr:hover{
+	background-color: #c9c9c9;
+}
+
+h3{
+	font-size: 20px;
+	font-family:sans-serif;
+	color:  #ca2d2d;
+	text-decoration: underline;
+	margin: 4px;
+
+}
+
+li{
+
+	color: black;
+	font-size: 20px;
+}
+
+.images img{
+	width: 20px;
+	height: 20px;
+	margin: 5px 15px 5px 5px;
+	display: block;
+}
+
+
+
+
+/*
+div .entete{
+	display: inline-block;
+}*/
+
+#main{
+	border-radius: 3px;
+	border: solid 1px #E5E5E5;
+	padding: 20px;
+  margin: 20px;
+}
+
+.entete .logo{
+	display: inline-block;
+
+}
+
+.logo img{
+	max-height: 90px;
+	margin: 5px;
+}
+
+.entete .texte{
+	margin: 5px;
+	display: inline-block;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.texte p{
+	margin: 5px;
+}
+
+
+div .images{
+	float: left;
+	display: inline;
+}
+
+#content {
+	text-align: center;
+}
+fieldset {
+  margin-bottom: 15px;
+  padding: 10px;
+}
+
+legend {
+  padding: 0px 3px;
+  font-weight: bold;
+  font-variant: small-caps;
+}
+
+label {
+  width: 110px;
+  display: inline-block;
+  vertical-align: top;
+  margin: 6px;
+}
+
+
+input:focus {
+  background: #eaeaea;
+}
+
+
+select {
+ width: 254px;
+}
+
+footer{
+	background-color: #494949;
+	margin-top: 15px;
+	padding: 25px;
+
+}
+
+
+footer a{
+	color: white;
+	text-decoration: none;
+	text-transform: uppercase;
+  font-size: 110%;
+}
+
+.ligne{
+	width: 100%;
+	height: 50px;
+	background-color: #649dc5;
+	/**/
+}
+
+.ligne p a{
+	color: white;
+	font-size: 30px;
+	margin: 0px;
+	height: 100%;
+	text-decoration: none;
+}
+
+.ligne p a:hover{
+	border-bottom-width: 3px;
+	border-bottom-color: red;
+	border-bottom-style: solid;
+}

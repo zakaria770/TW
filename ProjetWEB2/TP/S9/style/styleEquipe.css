@@ -1,0 +1,39 @@
+   body {
+     font-family : Helvetica ;
+     margin-left : 10mm;
+     margin-right : 10mm ;
+   }
+   h1 {
+     color : blue ;
+   }
+   fieldset {
+     border : 1px solid blue ;
+     margin : 10px ;
+   }
+   section#errorMessage{
+   		background-color : lightyellow;
+   		padding : 5pt;
+      margin : 10px ;
+   }
+   #cp:invalid {color:red}
+   #fullList {
+   		display:none;
+   }
+   table {
+   		border-collapse : collapse;
+   }
+
+   table td {
+   		border : solid 1pt black;
+   		padding : 3pt;
+   }
+   #carte {
+                width : 500px;
+                height : 300px;
+                border : dashed 1pt;
+            }
+
+
+  .hidden {
+    display : none;
+  }

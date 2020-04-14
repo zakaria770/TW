@@ -1,0 +1,78 @@
+body {
+  width : 80%;
+  margin : auto;
+}
+html {
+  background-color: black;
+}
+
+#couverture{
+  margin: 20px;
+  width: 90%;
+  height: 300px;
+  padding: 10px;
+  border:3px solid red;
+
+}
+
+#carte{
+  width: 400px;
+  height: 500px;
+  float: left;
+  margin: 30px;
+   border:2px dashed red;
+
+
+}
+
+#body{
+  /*! margin: 10px; */
+  background-color:#EFEFEF;
+}
+#mel{
+  color: red;
+  font-style:italic;
+}
+h1{
+  text-shadow: 1px 1px 2px silver;
+}
+h2{
+  font-style:italic;
+  color: black;
+}
+h3{
+  font-style: italic;
+  color: green;
+  font-size:28px;
+}
+
+ul{
+  display: inline-block;
+  color:  black;
+  width: 150px;
+  margin: 15px;
+  border-left: 2px solid green;
+
+}
+li{
+  font-size: 14px;
+}
+
+
+body{
+  /*margin: 15px;*/
+  padding: 10px;
+  color: silver;
+}
+label{
+  font-style: italic;
+  font-size: 20px;
+  margin: 10px;
+  padding: 10px;
+  color: red;
+}
+
+select{
+  background-color: #b0c4de;
+
+}

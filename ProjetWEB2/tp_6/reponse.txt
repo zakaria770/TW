@@ -1,0 +1,103 @@
+OUAICHOUCHE Salah Zakaria Groupe 3	
+Q1
+a.select dossard, nom from coureurs
+b.select dossard, nom from coureurs order by dossard desc
+c.Select dossard,nom,equipe from coureurs order by equipe,nom
+d.Select dossard,nom,taille from coureurs order by taille
+e.Select dossard,nom from coureurs where equipe = 'LavePlusBlanc'
+f.Select coureurs."dossard",coureurs."nom" from coureurs where equipe = 'LavePlusBlanc'
+g.Select coureurs."nom", taille,equipe from coureurs where taille < '180'
+h.Select coureurs."nom", taille,equipe from coureurs where taille < '180' order by taille
+i.select couleur from equipes
+
+Q2
+a.b.select nom || ' appartient a l''equipe ' || equipe as appartenance from coureurs
+c.Select upper(nom) as "nom maj",length(nom) as "lg" from coureurs
+d1.Select upper(nom) ,length(nom)  from coureurs order by length(nom)
+d2.Select upper(nom) as "nom maj",length(nom) as "lg" from coureurs order by "lg"
+e.Select dossard,initcap(nom) as nom,upper(substring(equipe from 1 for 3)) from coureurs
+
+Q3
+a.Select nom from coureurs where nom LIKE 'a%'
+
+b-Select nom from coureurs where nom LIKE '%er%'
+
+c-Select nom from coureurs where nom LIKE '_____'
+
+d-Select nom from coureurs where nom LIKE '%a__'
+
+e-Select nom from coureurs where nom LIKE '%a__%'
+ 
+Q4
+a-Select taille/100 from coureurs
+	
+b-Select taille/100.  from coureurs
+
+c-Select cast(taille/100. AS NUMERIC(10,2)) from coureurs
+
+d-Select trunc(taille/100.,2) AS Taille from coureurs
+
+Q5
+
+a- Select * from coureurs,equipes
+	
+b-select *
+
+from coureurs join equipes on coureurs.equipe = equipes.nom	
+
+c-Select dossard,coureurs.nom,equipe,couleur from coureurs,equipes where equipes.nom = coureurs.equipe
+	
+d-Select coureurs.nom,equipes.directeur from coureurs,equipes where equipes.nom = coureurs.equipe
+
+e-Select coureurs.nom,coureurs.dossard,coureurs.equipe
+from coureurs
+join equipes on coureurs.equipe=equipes.nom 
+where equipes.directeur LIKE 'Ralph'
+
+f-Select equipes.directeur from equipes
+join coureurs on coureurs.equipe=equipes.nom
+where coureurs.nom LIKE 'alphonse'
+
+Q6 ajout
+a.insert into ma_table values (v_1, v_2, v_3...)
+insert into equipes values ('Nouvelle Équipe','orange','Archibald')
+insert into equipes (couleur,directeur,nom) values ('orange','Archibald','Nouvelle Équipe')
+
+b. insert into coureurs  values ('10','Adel','Nouvelle Équipe','180')
+insert into coureurs  values ('20' , 'Alex' , 'Nouvelle Équipe' , '185' )
+
+Q7
+a.insert into equipes (couleur,nom) values ('orange','Nouvelle Équipe2')
+B.select equipes.nom from equipes where directeur  is null
+C.select equipes.nom from equipes where directeur  is not null
+
+Q8 modification
+update ma_table set attr = nouvelle_valeur where qualification
+
+8- 
+	a. update coureurs set taille = taille  - 1 where coureurs.equipe = 'PicsouBank'
+	b. update equipes set directeur = 'Lyes' where nom = 'Nouvelle Équipe'
+
+9-
+     a. insert into etape (dossard, arrivee) values (8 ,'14:50:40')
+	insert into etape (dossard, arrivee) values (9 ,'15:50:40')
+	insert into etape (dossard, arrivee) values (1 ,'17:32:30')
+	insert into etape (dossard, arrivee) values (2 ,'18:20:40')
+	insert into etape (dossard, arrivee) values (4 ,'18:50:40')
+
+
+10- 
+	a. select coureurs.nom, coureurs.dossard, etape.arrivee from coureurs join etape on etape.dossard = coureurs.dossard order by etape.arrivee
+	b. select coureurs.nom, coureurs.dossard, etape.arrivee from coureurs join etape on etape.dossard = coureurs.dossard where etape.arrivee < '16:00:00' order by etape.arrivee
+	c. select coureurs.nom, coureurs.dossard, coureurs.equipe, equipes.couleur, etape.arrivee from coureurs join etape on etape.dossard = coureurs.dossard join equipes on equipes.nom = coureurs.equipe order by etape.arrivee
+	
+
+analyse les info dans quel table on a besoin on prend le moins de tables possible,
+
+
+
+
+
+Pour tester un service TP9 
+http://webtp.fil.univ-lille1.fr/~ouaichouche/S9/services/getInfoEquipe.php
+http://webtp.fil.univ-lille1.fr/~ouaichouche/S9/services/getCoureurs.php
